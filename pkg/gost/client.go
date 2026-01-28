@@ -377,7 +377,7 @@ func (c *Client) doRequest(method, path string, body interface{}) (*http.Respons
 }
 
 // BuildTCPForwardService 构建 TCP 转发服务配置
-func BuildTCPForwardService(name string, listenPort int, targets []string, strategy string) *ServiceConfig {
+func BuildTCPForwardService(name string, listenPort int, targets []string, strategy string, maxFails int, failTimeout time.Duration) *ServiceConfig {
 	nodes := make([]*ForwarderNode, 0)
 	for i, target := range targets {
 		nodes = append(nodes, &ForwarderNode{
@@ -404,15 +404,15 @@ func BuildTCPForwardService(name string, listenPort int, targets []string, strat
 			Nodes: nodes,
 			Selector: &SelectorConfig{
 				Strategy:    strategy,
-				MaxFails:    1,
-				FailTimeout: 30 * time.Second,
+				MaxFails:    maxFails,
+				FailTimeout: failTimeout,
 			},
 		},
 	}
 }
 
 // BuildUDPForwardService 构建 UDP 转发服务配置
-func BuildUDPForwardService(name string, listenPort int, targets []string, strategy string) *ServiceConfig {
+func BuildUDPForwardService(name string, listenPort int, targets []string, strategy string, maxFails int, failTimeout time.Duration) *ServiceConfig {
 	nodes := make([]*ForwarderNode, 0)
 	for i, target := range targets {
 		nodes = append(nodes, &ForwarderNode{
@@ -439,8 +439,8 @@ func BuildUDPForwardService(name string, listenPort int, targets []string, strat
 			Nodes: nodes,
 			Selector: &SelectorConfig{
 				Strategy:    strategy,
-				MaxFails:    1,
-				FailTimeout: 30 * time.Second,
+				MaxFails:    maxFails,
+				FailTimeout: failTimeout,
 			},
 		},
 	}

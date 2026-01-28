@@ -189,6 +189,20 @@
                </el-select>
             </el-form-item>
           </el-col>
+          <el-col :span="12">
+            <el-form-item label="最大失败" prop="max_fails">
+              <el-input-number v-model="form.max_fails" :min="0" :max="10" controls-position="right" style="width: 100%" />
+              <div class="form-hint">失败次数达到阈值后剔除节点（0 表示默认）</div>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item label="失败恢复" prop="fail_timeout">
+              <el-input-number v-model="form.fail_timeout" :min="0" :max="600" controls-position="right" style="width: 100%" />
+              <div class="form-hint">失败后等待多少秒再尝试恢复（0 表示默认）</div>
+            </el-form-item>
+          </el-col>
         </el-row>
 
         <el-form-item label="目标列表" style="margin-bottom: 0;">
@@ -263,6 +277,8 @@ const form = reactive({
   listen_port: 0,
   targetList: [{ address: '' }],
   strategy: 'round',
+  max_fails: 1,
+  fail_timeout: 30,
   remark: ''
 })
 
@@ -362,7 +378,7 @@ const openDialog = (row = null) => {
     // 解析 targets
     let tList = []
     if (row.targets && row.targets.length > 0) {
-        tList = row.targets.map(t => ({ address: t }))
+      tList = row.targets.map(t => ({ address: t }))
     }
 
     Object.assign(form, {
@@ -374,6 +390,8 @@ const openDialog = (row = null) => {
       listen_port: row.listen_port,
       targetList: tList.length > 0 ? tList : [{ address: '' }],
       strategy: row.strategy || 'round',
+      max_fails: row.max_fails ?? 1,
+      fail_timeout: row.fail_timeout ?? 30,
       remark: row.remark || ''
     })
   } else {
@@ -386,6 +404,8 @@ const openDialog = (row = null) => {
       listen_port: 8000,
       targetList: [{ address: '' }],
       strategy: 'round',
+      max_fails: 1,
+      fail_timeout: 30,
       remark: ''
     })
   }
@@ -414,6 +434,8 @@ const handleSubmit = async () => {
         listen_port: form.listen_port,
         targets: targets,
         strategy: form.strategy,
+        max_fails: form.max_fails,
+        fail_timeout: form.fail_timeout,
         remark: form.remark
       }
       
