@@ -38,7 +38,7 @@
 **方式 A: Docker (推荐)**
 确保已安装 Docker 和 Docker Compose，然后运行：
 ```bash
-curl -sSL https://raw.githubusercontent.com/apicoder-peng/gostPanel/master/docker-compose.yml -o docker-compose.yml
+curl -sSL https://raw.githubusercontent.com/code-gopher/gostPanel/master/docker-compose.yml -o docker-compose.yml
 docker-compose up -d
 ```
 
@@ -47,26 +47,26 @@ docker-compose up -d
 
 **默认安装 (端口 39100):**
 ```bash
-bash <(curl -sSL https://raw.githubusercontent.com/apicoder-peng/gostPanel/master/scripts/install_panel.sh)
+bash <(curl -sSL https://raw.githubusercontent.com/code-gopher/gostPanel/master/scripts/install_panel.sh)
 ```
 
 **自定义端口 (例如 8080):**
 ```bash
-bash <(curl -sSL https://raw.githubusercontent.com/apicoder-peng/gostPanel/master/scripts/install_panel.sh) 8080
+bash <(curl -sSL https://raw.githubusercontent.com/code-gopher/gostPanel/master/scripts/install_panel.sh) 8080
 ```
 或者
 ```bash
-bash <(curl -sSL https://raw.githubusercontent.com/apicoder-peng/gostPanel/master/scripts/install_panel.sh) install --port 8080
+bash <(curl -sSL https://raw.githubusercontent.com/code-gopher/gostPanel/master/scripts/install_panel.sh) install --port 8080
 ```
 
 **卸载面板:**
 ```bash
-bash <(curl -sSL https://raw.githubusercontent.com/apicoder-peng/gostPanel/master/scripts/install_panel.sh) uninstall
+bash <(curl -sSL https://raw.githubusercontent.com/code-gopher/gostPanel/master/scripts/install_panel.sh) uninstall
 ```
 
 **卸载节点:**
 ```bash
-bash <(curl -sSL https://raw.githubusercontent.com/apicoder-peng/gostPanel/master/scripts/install_node.sh) uninstall
+bash <(curl -sSL https://raw.githubusercontent.com/code-gopher/gostPanel/master/scripts/install_node.sh) uninstall
 ```
 
 ---
@@ -108,7 +108,7 @@ bash <(curl -sSL https://raw.githubusercontent.com/apicoder-peng/gostPanel/maste
 
 ## 📦 预编译下载
 
-项目支持多平台二进制发布，请访问 [Releases](https://github.com/apicoder-peng/gostPanel/releases) 下载：
+项目支持多平台二进制发布，请访问 [Releases](https://github.com/code-gopher/gostPanel/releases) 下载：
 - **Linux**: amd64, arm64
 - **Windows**: amd64
 - **macOS**: Apple Silicon, Intel
