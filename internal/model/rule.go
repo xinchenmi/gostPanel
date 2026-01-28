@@ -44,11 +44,13 @@ type GostRule struct {
 	Protocol   RuleProtocol `gorm:"size:10;not null;default:tcp" json:"protocol"` // 协议
 	ListenPort int          `gorm:"not null" json:"listen_port"`                  // 监听端口
 
-	Targets   []string   `gorm:"type:json;serializer:json" json:"targets"` // 多目标列表 (host:port)
-	Strategy  string     `gorm:"size:20;default:round" json:"strategy"`    // 负载均衡策略 (round, random, fifo)
-	EnableTLS bool       `gorm:"default:false" json:"enable_tls"`          // 是否启用 TLS
-	Status    RuleStatus `gorm:"size:20;default:stopped" json:"status"`    // 状态
-	ServiceID string     `gorm:"size:100" json:"service_id"`               // Gost 服务 ID
+	Targets     []string   `gorm:"type:json;serializer:json" json:"targets"` // 多目标列表 (host:port)
+	Strategy    string     `gorm:"size:20;default:round" json:"strategy"`    // 负载均衡策略 (round, random, fifo)
+	MaxFails    int        `gorm:"default:1" json:"max_fails"`               // 失败阈值 (用于 failover 等策略)
+	FailTimeout int        `gorm:"default:30" json:"fail_timeout"`           // 失败恢复时间 (秒)
+	EnableTLS   bool       `gorm:"default:false" json:"enable_tls"`          // 是否启用 TLS
+	Status      RuleStatus `gorm:"size:20;default:stopped" json:"status"`    // 状态
+	ServiceID   string     `gorm:"size:100" json:"service_id"`               // Gost 服务 ID
 
 	// 流量监控配置
 	ObserverID string `gorm:"size:100" json:"observer_id"` // 观察器 ID

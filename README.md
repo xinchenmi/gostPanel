@@ -20,6 +20,13 @@
 - 🛡️ **安全可靠** - 支持 API 认证，内置操作审计日志。
 - 🐳 **快速部署** - 全量支持 Docker 一键运行及 GitHub Action 自动构建。
 
+### ⭐ 改进后的优势（重点）
+
+- ✅ **智能故障剔除**：规则级可配置 `max_fails`，当节点连续失败达到阈值自动剔除，减少抖动带来的误切流。
+- ✅ **自动恢复机制**：规则级 `fail_timeout` 控制恢复时间，稳定后自动加入可用节点列表。
+- ✅ **面板可视化配置**：新增的故障切换参数可在规则页面直接设置，无需手改 YAML。
+- ✅ **更贴近“全球多线路”架构**：在入口侧通过负载策略 + 失败恢复，实现更稳定的多落地线路调度。
+
 ---
 
 ## 🌐 在线体验
@@ -38,7 +45,7 @@
 **方式 A: Docker (推荐)**
 确保已安装 Docker 和 Docker Compose，然后运行：
 ```bash
-curl -sSL https://raw.githubusercontent.com/apicoder-peng/gostPanel/master/docker-compose.yml -o docker-compose.yml
+curl -sSL https://raw.githubusercontent.com/xinchenmi/gostPanel/codex/add-features-from-zeroforwarder-to-gostv3/docker-compose.yml -o docker-compose.yml
 docker-compose up -d
 ```
 
@@ -47,26 +54,26 @@ docker-compose up -d
 
 **默认安装 (端口 39100):**
 ```bash
-bash <(curl -sSL https://raw.githubusercontent.com/apicoder-peng/gostPanel/master/scripts/install_panel.sh)
+bash <(curl -sSL https://raw.githubusercontent.com/xinchenmi/gostPanel/codex/add-features-from-zeroforwarder-to-gostv3/scripts/install_panel.sh)
 ```
 
 **自定义端口 (例如 8080):**
 ```bash
-bash <(curl -sSL https://raw.githubusercontent.com/apicoder-peng/gostPanel/master/scripts/install_panel.sh) 8080
+bash <(curl -sSL https://raw.githubusercontent.com/xinchenmi/gostPanel/codex/add-features-from-zeroforwarder-to-gostv3/scripts/install_panel.sh) 8080
 ```
 或者
 ```bash
-bash <(curl -sSL https://raw.githubusercontent.com/apicoder-peng/gostPanel/master/scripts/install_panel.sh) install --port 8080
+bash <(curl -sSL https://raw.githubusercontent.com/xinchenmi/gostPanel/codex/add-features-from-zeroforwarder-to-gostv3/scripts/install_panel.sh) install --port 8080
 ```
 
 **卸载面板:**
 ```bash
-bash <(curl -sSL https://raw.githubusercontent.com/apicoder-peng/gostPanel/master/scripts/install_panel.sh) uninstall
+bash <(curl -sSL https://raw.githubusercontent.com/xinchenmi/gostPanel/codex/add-features-from-zeroforwarder-to-gostv3/scripts/install_panel.sh) uninstall
 ```
 
 **卸载节点:**
 ```bash
-bash <(curl -sSL https://raw.githubusercontent.com/apicoder-peng/gostPanel/master/scripts/install_node.sh) uninstall
+bash <(curl -sSL https://raw.githubusercontent.com/xinchenmi/gostPanel/codex/add-features-from-zeroforwarder-to-gostv3/scripts/install_node.sh) uninstall
 ```
 
 ---
@@ -108,7 +115,7 @@ bash <(curl -sSL https://raw.githubusercontent.com/apicoder-peng/gostPanel/maste
 
 ## 📦 预编译下载
 
-项目支持多平台二进制发布，请访问 [Releases](https://github.com/apicoder-peng/gostPanel/releases) 下载：
+项目支持多平台二进制发布，请访问 [Releases](https://github.com/xinchenmi/gostPanel/releases) 下载：
 - **Linux**: amd64, arm64
 - **Windows**: amd64
 - **macOS**: Apple Silicon, Intel

@@ -4,6 +4,7 @@ package service
 import (
 	stderrors "errors"
 	"fmt"
+	"time"
 
 	"gost-panel/internal/dto"
 	"gost-panel/internal/errors"
@@ -91,17 +92,19 @@ func (s *RuleService) Create(req *dto.CreateRuleReq, userID uint, username strin
 
 	// 创建规则
 	rule := &model.GostRule{
-		NodeID:     req.NodeID,
-		TunnelID:   req.TunnelID,
-		Name:       req.Name,
-		Type:       model.RuleType(req.Type),
-		Protocol:   model.RuleProtocol(req.Protocol),
-		ListenPort: req.ListenPort,
-		Targets:    req.Targets,
-		Strategy:   req.Strategy,
-		EnableTLS:  req.EnableTLS,
-		Remark:     req.Remark,
-		Status:     model.RuleStatusStopped,
+		NodeID:      req.NodeID,
+		TunnelID:    req.TunnelID,
+		Name:        req.Name,
+		Type:        model.RuleType(req.Type),
+		Protocol:    model.RuleProtocol(req.Protocol),
+		ListenPort:  req.ListenPort,
+		Targets:     req.Targets,
+		Strategy:    req.Strategy,
+		MaxFails:    normalizeMaxFails(req.MaxFails),
+		FailTimeout: normalizeFailTimeout(req.FailTimeout),
+		EnableTLS:   req.EnableTLS,
+		Remark:      req.Remark,
+		Status:      model.RuleStatusStopped,
 	}
 
 	if err = s.ruleRepo.Create(rule); err != nil {
@@ -156,6 +159,8 @@ func (s *RuleService) Update(id uint, req *dto.UpdateRuleReq, userID uint, usern
 	rule.ListenPort = req.ListenPort
 	rule.Targets = req.Targets
 	rule.Strategy = req.Strategy
+	rule.MaxFails = normalizeMaxFails(req.MaxFails)
+	rule.FailTimeout = normalizeFailTimeout(req.FailTimeout)
 	rule.EnableTLS = req.EnableTLS
 	rule.Remark = req.Remark
 
@@ -439,6 +444,20 @@ func (s *RuleService) GetStats() (map[string]int64, error) {
 	}, nil
 }
 
+func normalizeMaxFails(value int) int {
+	if value <= 0 {
+		return 1
+	}
+	return value
+}
+
+func normalizeFailTimeout(value int) int {
+	if value <= 0 {
+		return 30
+	}
+	return value
+}
+
 // setupRuleObserver 配置规则的观察器
 func (s *RuleService) setupRuleObserver(client *gost.Client, rule *model.GostRule, svc *gost.ServiceConfig) error {
 	// 确保全局观察器存在
@@ -467,15 +486,17 @@ func (s *RuleService) setupRuleObserver(client *gost.Client, rule *model.GostRul
 func (s *RuleService) buildAndStartService(client *gost.Client, rule *model.GostRule, serviceName string, chainID string) error {
 	targets := rule.Targets
 	strategy := rule.Strategy
+	maxFails := normalizeMaxFails(rule.MaxFails)
+	failTimeout := time.Duration(normalizeFailTimeout(rule.FailTimeout)) * time.Second
 	if strategy == "" || len(targets) == 1 {
 		strategy = "round"
 	}
 
 	var svc *gost.ServiceConfig
 	if rule.Protocol == model.RuleProtocolTCP {
-		svc = gost.BuildTCPForwardService(serviceName, rule.ListenPort, targets, strategy)
+		svc = gost.BuildTCPForwardService(serviceName, rule.ListenPort, targets, strategy, maxFails, failTimeout)
 	} else {
-		svc = gost.BuildUDPForwardService(serviceName, rule.ListenPort, targets, strategy)
+		svc = gost.BuildUDPForwardService(serviceName, rule.ListenPort, targets, strategy, maxFails, failTimeout)
 	}
 
 	// 如果有 Chain ID，则关联（用于隧道转发）

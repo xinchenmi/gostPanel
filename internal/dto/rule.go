@@ -14,9 +14,11 @@ type CreateRuleReq struct {
 	Protocol   string `json:"protocol" binding:"required,oneof=tcp udp"`      // 协议类型
 	ListenPort int    `json:"listen_port" binding:"required,min=1,max=65535"` // 监听端口
 
-	Targets   []string `json:"targets"`                                                 // 多目标列表
-	Strategy  string   `json:"strategy" binding:"omitempty,oneof=round rand fifo hash"` // 负载均衡策略
-	EnableTLS bool     `json:"enable_tls"`                                              // 是否启用 TLS
+	Targets     []string `json:"targets"`                                                 // 多目标列表
+	Strategy    string   `json:"strategy" binding:"omitempty,oneof=round rand fifo hash"` // 负载均衡策略
+	MaxFails    int      `json:"max_fails" binding:"omitempty,min=0,max=10"`              // 最大失败次数
+	FailTimeout int      `json:"fail_timeout" binding:"omitempty,min=0,max=600"`          // 失败恢复时间(秒)
+	EnableTLS   bool     `json:"enable_tls"`                                              // 是否启用 TLS
 
 	Remark string `json:"remark"` // 备注
 }
@@ -27,9 +29,11 @@ type UpdateRuleReq struct {
 	Protocol   string `json:"protocol" binding:"required,oneof=tcp udp"`      // 协议类型
 	ListenPort int    `json:"listen_port" binding:"required,min=1,max=65535"` // 监听端口
 
-	Targets   []string `json:"targets"`                                                 // 多目标列表
-	Strategy  string   `json:"strategy" binding:"omitempty,oneof=round rand fifo hash"` // 负载均衡策略
-	EnableTLS bool     `json:"enable_tls"`                                              // 是否启用 TLS
+	Targets     []string `json:"targets"`                                                 // 多目标列表
+	Strategy    string   `json:"strategy" binding:"omitempty,oneof=round rand fifo hash"` // 负载均衡策略
+	MaxFails    int      `json:"max_fails" binding:"omitempty,min=0,max=10"`              // 最大失败次数
+	FailTimeout int      `json:"fail_timeout" binding:"omitempty,min=0,max=600"`          // 失败恢复时间(秒)
+	EnableTLS   bool     `json:"enable_tls"`                                              // 是否启用 TLS
 
 	Remark string `json:"remark"` // 备注
 }
